@@ -10,14 +10,22 @@ namespace dota_2_api.Repositories
 {
     public class HeroRepository : IHeroRepository
     {
-        public IReadOnlyCollection<IHero> Read()
+
+        private static readonly Lazy<IReadOnlyCollection<IHero>> heros = new Lazy<IReadOnlyCollection<IHero>>(() => new List<IHero>
         {
-            return new List<IHero>
-            {
                 new Hero("Axe", HeroType.Stength),
                 new Hero("Juggernaut", HeroType.Agility),
                 new Hero("Disruptor", HeroType.Intelligence)
-            };
+            });
+
+        public IReadOnlyCollection<IHero> Read()
+        {
+            return heros.Value;
+        }
+
+        public IHero ReadByName(string name)
+        {
+            return heros.Value.SingleOrDefault(h => String.Equals(h.Name, name, StringComparison.OrdinalIgnoreCase));
         }
     }
 }

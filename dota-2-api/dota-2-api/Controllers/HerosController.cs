@@ -1,5 +1,7 @@
-﻿using dota_2_api.Models.Dota2.Interfaces;
+﻿using AutoMapper;
+using dota_2_api.Models.Dota2.Interfaces;
 using dota_2_api.Repositories.Interfaces;
+using dota_2_api.ViewModels.Dota2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +15,13 @@ namespace dota_2_api.Controllers
     [Authorize]
     public class HerosController : ApiController
     {
+        private readonly IMapper mapper;
         private readonly IHeroRepository heroRepository;
 
-        public HerosController(IHeroRepository heroRepository)
+        public HerosController(IMapper mapper, IHeroRepository heroRepository)
         {
             this.heroRepository = heroRepository;
+            this.mapper = mapper;
         }
 
         // GET: api/Heros
@@ -25,7 +29,7 @@ namespace dota_2_api.Controllers
         {
             try
             {
-                var heros = heroRepository.Read();
+                var heros = mapper.Map<HeroDto>(heroRepository.Read());
 
                 return Ok(heros);
             }
@@ -35,10 +39,25 @@ namespace dota_2_api.Controllers
             }
         }
 
-        // GET: api/Heros/5
-        public async Task<IHttpActionResult> Get(int id)
+        // GET: api/Heros/axe        
+        public async Task<IHttpActionResult> Get(string name)
         {
-            return Ok("value");
+
+            try
+            {
+                var hero = mapper.Map<HeroDto>(heroRepository.ReadByName(name));
+
+                if (hero == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(hero);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
         }
 
         // POST: api/Heros
