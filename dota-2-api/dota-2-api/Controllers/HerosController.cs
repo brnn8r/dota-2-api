@@ -1,4 +1,5 @@
 ﻿using dota_2_api.Models.Dota2.Interfaces;
+using dota_2_api.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,16 +13,32 @@ namespace dota_2_api.Controllers
     [Authorize]
     public class HerosController : ApiController
     {
-        // GET: api/Heros
-        public async Task<IEnumerable<IHero>> Get()
+        private readonly IHeroRepository heroRepository;
+
+        public HerosController(IHeroRepository heroRepository)
         {
-            return new string[] { "value1", "value2" };
+            this.heroRepository = heroRepository;
+        }
+
+        // GET: api/Heros
+        public async Task<IHttpActionResult> Get()
+        {
+            try
+            {
+                var heros = heroRepository.Read();
+
+                return Ok(heros);
+            }
+            catch (Exception e)
+            {
+                return InternalServerError();
+            }
         }
 
         // GET: api/Heros/5
-        public async Task<string> Get(int id)
+        public async Task<IHttpActionResult> Get(int id)
         {
-            return "value";
+            return Ok("value");
         }
 
         // POST: api/Heros
