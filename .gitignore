@@ -41,3 +41,16 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# =========================
+# VISUAL STUDIO & NUGET
+# =========================
+
+packages/
+!packages/repositories.config
+
+*.suo
+*.user
+ReSharper.*
+bin/
+Debug/
