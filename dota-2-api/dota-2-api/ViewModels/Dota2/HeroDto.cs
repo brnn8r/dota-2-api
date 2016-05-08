@@ -8,6 +8,6 @@ namespace dota_2_api.ViewModels.Dota2
     public class HeroDto
     {
         public string Name { get; set; }
-        public string HeroType { get; set; }
+        public string Type { get; set; }
     }
 }

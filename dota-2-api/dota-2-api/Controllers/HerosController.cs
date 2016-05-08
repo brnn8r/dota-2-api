@@ -29,7 +29,7 @@ namespace dota_2_api.Controllers
         {
             try
             {
-                var heros = mapper.Map<HeroDto>(heroRepository.Read());
+                var heros = mapper.Map<IEnumerable<HeroDto>>(heroRepository.Read());
 
                 return Ok(heros);
             }

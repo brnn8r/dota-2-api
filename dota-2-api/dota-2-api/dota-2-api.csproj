@@ -264,6 +264,7 @@
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\Dota2\HeroDto.cs" />
+    <Compile Include="ViewModels\Dota2\Maps\HeroMap.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />
