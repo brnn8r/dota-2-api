@@ -9,6 +9,8 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using dota_2_api.Services.Dota2;
+using System.Linq.Dynamic;
 
 namespace dota_2_api.Controllers
 {
@@ -25,13 +27,18 @@ namespace dota_2_api.Controllers
         }
 
         // GET: api/Heros
-        public async Task<IHttpActionResult> Get()
+        public async Task<IHttpActionResult> Get(string sort = "name")
         {
             try
             {
-                var heros = mapper.Map<IEnumerable<HeroDto>>(heroRepository.Read());
+                var heros = mapper.Map<IEnumerable<HeroDto>>(heroRepository.Read()).                    
+                    Sort(sort);                
 
                 return Ok(heros);
+            }
+            catch(ParseException pe)
+            {
+                return BadRequest(String.Format("Invalid sort parameter {0}",sort));
             }
             catch (Exception e)
             {
@@ -40,12 +47,12 @@ namespace dota_2_api.Controllers
         }
 
         // GET: api/Heros/axe        
-        public async Task<IHttpActionResult> Get(string name)
+        public async Task<IHttpActionResult> Get(string name, string sort = "name")
         {
 
             try
             {
-                var hero = mapper.Map<HeroDto>(heroRepository.ReadByName(name));
+                var hero = mapper.Map<HeroDto>(heroRepository.ReadByName(name));                
 
                 if (hero == null)
                 {
@@ -60,19 +67,19 @@ namespace dota_2_api.Controllers
             }
         }
 
-        // POST: api/Heros
-        public async void Post([FromBody]string value)
-        {
-        }
+        //// POST: api/Heros
+        //public async void Post([FromBody]string value)
+        //{
+        //}
 
-        // PUT: api/Heros/5
-        public async void Put(int id, [FromBody]string value)
-        {
-        }
+        //// PUT: api/Heros/5
+        //public async void Put(int id, [FromBody]string value)
+        //{
+        //}
 
-        // DELETE: api/Heros/5
-        public async void Delete(int id)
-        {
-        }
+        //// DELETE: api/Heros/5
+        //public async void Delete(int id)
+        //{
+        //}
     }
 }
