@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using dota_2_api.Services.Dota2;
 using System.Linq.Dynamic;
+using System.Web.Http.Description;
+using Swashbuckle.Swagger.Annotations;
+using dota_2_api.ViewModels.Dota2.Errors;
 
 namespace dota_2_api.Controllers
 {
@@ -27,7 +30,17 @@ namespace dota_2_api.Controllers
         }
 
         // GET: api/Heros
-        public async Task<IHttpActionResult> Get(string sort = "name")
+        /// <summary>
+        /// Retreive the set of all Dota2 heros.
+        /// </summary>
+        /// <param name="sort">Allows you to sort by one or more fields on a Hero. e.g. To sort by strength gain per level descending and then name ascending: ?sort=-StrengthGainPerLevel,name</param>
+        /// <param name="filter">Allows you to filter which heros are returned. e.g. To return only intelligence heros: ?filter=type:Intelligence</param>
+        /// <returns>HeroDto</returns>
+        [ResponseType(typeof(IEnumerable<HeroDto>))]
+        [SwaggerResponse(HttpStatusCode.OK, Type=typeof(IEnumerable<HeroDto>))]
+        [SwaggerResponse(HttpStatusCode.BadRequest, Type=typeof(UserError))]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
+        public async Task<IHttpActionResult> Get(string sort = "name", string filter = "")
         {
             try
             {
@@ -36,9 +49,14 @@ namespace dota_2_api.Controllers
 
                 return Ok(heros);
             }
-            catch(ParseException pe)
+            catch(SortException se)
             {
-                return BadRequest(String.Format("Invalid sort parameter {0}",sort));
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, new UserError("InvalidSortParameter", String.Format("Invalid sort parameter {0}", sort), String.Format("Invalid sort parameter {0}", sort))));
+
+                //return BadRequest();
+
+
+
             }
             catch (Exception e)
             {
@@ -46,8 +64,17 @@ namespace dota_2_api.Controllers
             }
         }
 
-        // GET: api/Heros/axe        
-        public async Task<IHttpActionResult> Get(string name, string sort = "name")
+        // GET: api/Heros/axe      
+        /// <summary>
+        /// Retreive a specific hero by name.
+        /// </summary>
+        /// <param name="name">The name of the hero to retrieve.</param>        
+        /// <returns>HeroDto</returns>
+        [ResponseType(typeof(HeroDto))]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(HeroDto))]
+        [SwaggerResponse(HttpStatusCode.BadRequest)]
+        [SwaggerResponse(HttpStatusCode.InternalServerError)]
+        public async Task<IHttpActionResult> Get(string name)
         {
 
             try

@@ -41,8 +41,25 @@ namespace dota_2_api.Services.Dota2
                 return queryable;
             }
 
-            queryable = queryable.OrderBy(String.Join(",", sortExpression));
+            try
+            {
+                queryable = queryable.OrderBy(String.Join(",", sortExpression));
+            }
+            catch(ParseException pe)
+            {
+                throw new SortException(pe);
+            }
+
+            
             return queryable;
+        }
+    }
+
+    public class SortException : Exception
+    {
+        public SortException(ParseException innerException) : base(innerException.Message, innerException)
+        {
+
         }
     }
 }

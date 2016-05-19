@@ -16,11 +16,13 @@ using Microsoft.Owin.Security.OAuth;
 using dota_2_api.Models;
 using dota_2_api.Providers;
 using dota_2_api.Results;
+using System.Web.Http.Description;
 
 namespace dota_2_api.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";
