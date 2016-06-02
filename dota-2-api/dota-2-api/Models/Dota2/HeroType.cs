@@ -8,7 +8,7 @@ namespace dota_2_api.Models.Dota2
     public enum HeroType
     {
         None = 0,
-        Stength = 1,
+        Strength = 1,
         Agility = 2,
         Intelligence = 3
     }

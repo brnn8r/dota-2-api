@@ -15,7 +15,7 @@ namespace dota_2_api.Repositories
         {
                 new Hero(
                     name: "Axe", 
-                    type: HeroType.Stength,
+                    type: HeroType.Strength,
                     initialStrength: 25,
                     initialAgility: 20,
                     initialIntelligence: 18,

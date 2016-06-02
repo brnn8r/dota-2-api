@@ -36,26 +36,23 @@ namespace dota_2_api.Controllers
         /// <param name="sort">Allows you to sort by one or more fields on a Hero. e.g. To sort by strength gain per level descending and then name ascending: ?sort=-StrengthGainPerLevel,name</param>
         /// <param name="filter">Allows you to filter which heros are returned. e.g. To return only intelligence heros: ?filter=type:Intelligence</param>
         /// <returns>HeroDto</returns>
-        [ResponseType(typeof(IEnumerable<HeroDto>))]
-        [SwaggerResponse(HttpStatusCode.OK, Type=typeof(IEnumerable<HeroDto>))]
+        [ResponseType(typeof(IEnumerable<Hero>))]
+        [SwaggerResponse(HttpStatusCode.OK, Type=typeof(IEnumerable<Hero>))]
         [SwaggerResponse(HttpStatusCode.BadRequest, Type=typeof(UserError))]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public async Task<IHttpActionResult> Get(string sort = "name", string filter = "")
         {
             try
             {
-                var heros = mapper.Map<IEnumerable<HeroDto>>(heroRepository.Read()).                    
-                    Sort(sort);                
+                var heros = mapper.Map<IEnumerable<Hero>>(heroRepository.Read())
+                    .Filter(filter)                    
+                    .Sort(sort);                
 
                 return Ok(heros);
             }
             catch(SortException se)
             {
-                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, new UserError("InvalidSortParameter", String.Format("Invalid sort parameter {0}", sort), String.Format("Invalid sort parameter {0}", sort))));
-
-                //return BadRequest();
-
-
+                return ResponseMessage(Request.CreateResponse(HttpStatusCode.BadRequest, UserError.SortingError.InvalidSortParameter(sort)));
 
             }
             catch (Exception e)
@@ -70,8 +67,8 @@ namespace dota_2_api.Controllers
         /// </summary>
         /// <param name="name">The name of the hero to retrieve.</param>        
         /// <returns>HeroDto</returns>
-        [ResponseType(typeof(HeroDto))]
-        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(HeroDto))]
+        [ResponseType(typeof(Hero))]
+        [SwaggerResponse(HttpStatusCode.OK, Type = typeof(Hero))]
         [SwaggerResponse(HttpStatusCode.BadRequest)]
         [SwaggerResponse(HttpStatusCode.InternalServerError)]
         public async Task<IHttpActionResult> Get(string name)
@@ -79,7 +76,7 @@ namespace dota_2_api.Controllers
 
             try
             {
-                var hero = mapper.Map<HeroDto>(heroRepository.ReadByName(name));                
+                var hero = mapper.Map<Hero>(heroRepository.ReadByName(name));                
 
                 if (hero == null)
                 {

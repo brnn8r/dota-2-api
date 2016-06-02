@@ -8,15 +8,15 @@ namespace dota_2_api.ViewModels.Dota2.Errors
     /// <summary>
     /// UserError class.
     /// </summary>
-    public class UserError
+    public partial class UserError
     {
         /// <summary>
         /// UserError constructor.
         /// </summary>
-        /// <param name="errorCode"></param>
-        /// <param name="userDescription"></param>
-        /// <param name="developerDescription"></param>
-        public UserError(string errorCode, string userDescription, string developerDescription)
+        /// <param name="errorCode">A unique code identifying the error.</param>
+        /// <param name="userDescription">A description of the error. Suitable for displaying to a user.</param>
+        /// <param name="developerDescription">A more detailed description of the error which should help a consumer developer diagnose the issue.</param>
+        private UserError(string errorCode, string userDescription, string developerDescription)
         {
             this.ErrorCode = errorCode;
             this.UserDescription = userDescription;

@@ -7,7 +7,7 @@ namespace dota_2_api.ViewModels.Dota2.Maps
     {
         protected override void Configure()
         {
-            CreateMap<IHero, HeroDto>().ReverseMap();
+            CreateMap<IHero, Hero>().ReverseMap();
         }
     }
 }
