@@ -54,3 +54,7 @@ packages/
 ReSharper.*
 bin/
 Debug/
+*.mdf
+*.ldf
+\.suo
+*.suo
